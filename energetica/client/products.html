@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energetica Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/categories.css">
+</head>
+<body>
+    <div class="splash-container">
+        <!-- Floating menu button -->
+        <button class="menu-button floating" onclick="toggleSidebar()">☰</button>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <ul class="menu-items">
+                <li class="menu-item" onclick="window.location.href='index.html'">Home</li>
+                <li class="menu-item">Energy Drinks</li>
+                <li class="menu-item">Energy Powders</li>
+                <li class="menu-item">Energetica Products</li>
+                <li class="menu-item">Merch</li>
+                <li class="menu-item">Login</li>
+                <li class="menu-item">Register</li>
+            </ul>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Add this new title section -->
+        <div class="mega-title">
+            <div class="title-line">ENERGY</div>
+            <div class="title-line">DRINKS<span class="accent-mark">_</span></div>
+        </div>
+
+        <!-- Background -->
+        <div class="category-background"></div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+    </script>
+</body>
+</html> 

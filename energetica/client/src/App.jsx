@@ -19,9 +19,8 @@ function App() {
   }, []);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Project Energetica</h1>
-      <p>Server Response: {message}</p>
+    <div>
+      {/* Removed the duplicate title and server response message */}
     </div>
   );
 }
