@@ -15,6 +15,7 @@ body {
   align-items: center;
   background: black;
   overflow-y: auto;
+  padding-bottom: 40px;
 }
 
 .title-container {
@@ -42,14 +43,18 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80px;
+  height: 30px;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   border-top: 1px solid rgba(0, 255, 255, 0.2);
   color: #fff;
   text-align: center;
-  padding: 20px;
+  padding: 8px;
   z-index: 1000;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer span {
