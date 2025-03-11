@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Products from './pages/Products';
+import Register from './pages/Register';
 import axios from 'axios';
 
 function App() {
@@ -19,10 +22,13 @@ function App() {
   }, []);
 
   return (
-    <div>
-      {/* Removed the duplicate title and server response message */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Products />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default App; 
+export default App;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/header.css';
 
@@ -7,6 +8,7 @@ function Products() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -26,6 +28,11 @@ function Products() {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const handleNavigation = (path) => {
+        navigate(path);
+        setIsSidebarOpen(false);
     };
 
     if (loading) return (
@@ -53,12 +60,12 @@ function Products() {
             {/* Sidebar */}
             <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
                 <ul className="menu-items">
-                    <li className="menu-item">Home</li>
-                    <li className="menu-item">Products</li>
+                    <li className="menu-item" onClick={() => handleNavigation('/')}>Home</li>
+                    <li className="menu-item" onClick={() => handleNavigation('/products')}>Products</li>
                     <li className="menu-item">About Us</li>
                     <li className="menu-item">Contact</li>
                     <li className="menu-item">Login</li>
-                    <li className="menu-item">Register</li>
+                    <li className="menu-item" onClick={() => handleNavigation('/register')}>Register</li>
                 </ul>
             </div>
 

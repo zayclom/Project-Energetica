@@ -1,0 +1,96 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #111;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                     repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.1) 2px, rgba(0, 255, 255, 0.1) 4px);
+}
+
+.register-card {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 20px #00ffff, inset 0 0 20px rgba(0, 255, 255, 0.2);
+    padding: 2rem;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 500px;
+    color: #fff;
+}
+
+.register-card h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #00ffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00ffff;
+    color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s;
+    outline: none;
+}
+
+.form-group input:focus {
+    box-shadow: 0 0 10px #00ffff;
+    border-color: #00ffff;
+}
+
+.register-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-button:hover {
+    background-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 15px #00ffff;
+}
+
+.register-button:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent);
+    transition: 0.5s;
+}
+
+.register-button:hover:after {
+    left: 100%;
+} 

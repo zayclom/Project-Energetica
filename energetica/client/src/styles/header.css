@@ -1,0 +1,304 @@
+/* Header styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.header-title {
+    margin: 0 auto;
+    color: #00ffff;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    color: #00ffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s;
+    margin-right: 1rem;
+}
+
+.menu-button:hover {
+    text-shadow: 0 0 10px #00ffff;
+}
+
+/* Sidebar styles */
+.sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: left 0.3s ease;
+    z-index: 1500;
+    border-right: 2px solid #00ffff;
+    box-shadow: 5px 0 20px rgba(0, 255, 255, 0.3);
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1400;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.sidebar-overlay.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.menu-items {
+    list-style: none;
+    padding: 0;
+    margin: 4rem 0 0 0;
+}
+
+.menu-item {
+    padding: 1rem 1.5rem;
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.menu-item:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+/* Splash container and lightning effects */
+.splash-container {
+    min-height: 100vh;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+    padding-top: 60px; /* Space for fixed header */
+}
+
+.lightning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.bolt {
+    position: absolute;
+    top: -300px; /* Start above the viewport */
+    background: linear-gradient(to bottom, transparent, #00ffff, transparent);
+    width: 2px;
+    height: 100px;
+    z-index: 10;
+    opacity: 0;
+    animation: lightning 5s infinite; /* Adjust time to control frequency */
+}
+
+@keyframes lightning {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    1%, 10% {
+        opacity: 0.5;
+        height: 300px;
+    }
+    2%, 9% {
+        opacity: 0.2;
+    }
+    3%, 8% {
+        opacity: 0.7;
+    }
+    4%, 7% {
+        opacity: 0.3;
+    }
+    5%, 6% {
+        opacity: 0.8;
+        height: 800px;
+    }
+    11%, 100% {
+        opacity: 0;
+        transform: translateY(1000px);
+    }
+}
+
+/* Products content */
+.products-content {
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Product card styles */
+.product-card {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ffff;
+    border-radius: 5px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.product-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+.product-title {
+    color: #00ffff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+.product-image-container {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-description {
+    color: #ccc;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.product-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat {
+    color: #00ffff;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.product-price {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.cyber-button {
+    background-color: transparent;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    border-radius: 3px;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-button:hover {
+    background-color: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.cyber-button:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent);
+    transition: 0.5s;
+}
+
+.cyber-button:hover:after {
+    left: 100%;
+}
+
+/* Loading and error states */
+.loading, .error {
+    color: #00ffff;
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 40vh;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+} 
