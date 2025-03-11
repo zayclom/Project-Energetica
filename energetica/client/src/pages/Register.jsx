@@ -19,16 +19,27 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords don't match!");
-            return;
-        }
-        
+        // Example API endpoint for registration
+        const apiEndpoint = '/api/register';
+
         try {
-            // TODO: Implement API call to register user
-            console.log('Registration data:', formData);
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                // Navigate to a new page, e.g., login or welcome page
+                window.location.href = '/welcome';
+            } else {
+                // Handle errors
+                console.error('Registration failed');
+            }
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error('Error:', error);
         }
     };
 
