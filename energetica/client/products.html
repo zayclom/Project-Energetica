@@ -3,50 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energetica Products</title>
+    <title>Products - Energetica</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/categories.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/products.css">
 </head>
 <body>
-    <div class="splash-container">
-        <!-- Floating menu button -->
-        <button class="menu-button floating" onclick="toggleSidebar()">☰</button>
-
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <ul class="menu-items">
-                <li class="menu-item" onclick="window.location.href='index.html'">Home</li>
-                <li class="menu-item">Energy Drinks</li>
-                <li class="menu-item">Energy Powders</li>
-                <li class="menu-item">Energetica Products</li>
-                <li class="menu-item">Merch</li>
-                <li class="menu-item">Login</li>
-                <li class="menu-item">Register</li>
-            </ul>
+    <div class="products-container">
+        <div class="lightning">
+            <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
+            <div class="bolt" style="left: 80%; animation-delay: 0.5s;"></div>
+        </div>
+        
+        <h1 class="cyber-title">Power Arsenal</h1>
+        
+        <div class="category-buttons">
+            <button class="cyber-button active" data-category="all">All Products</button>
+            <button class="cyber-button" data-category="drink">Energy Drinks</button>
+            <button class="cyber-button" data-category="powder">Power Powders</button>
         </div>
 
-        <!-- Sidebar Overlay -->
-        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-        <!-- Add this new title section -->
-        <div class="mega-title">
-            <div class="title-line">ENERGY</div>
-            <div class="title-line">DRINKS<span class="accent-mark">_</span></div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here -->
         </div>
 
-        <!-- Background -->
-        <div class="category-background"></div>
+        <button class="cyber-button back-button" onclick="window.location.href='index.html'">Return to Base</button>
     </div>
 
+    <div class="footer">
+        © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
+    </div>
+
+    <script src="js/effects.js"></script>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
+        let currentCategory = 'all';
+        let products = [];
+
+        async function fetchProducts(category = 'all') {
+            try {
+                const url = category === 'all' 
+                    ? 'http://localhost:5001/api/products'
+                    : `http://localhost:5001/api/products/category/${category}`;
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Fetched products:', data); // Debug log
+                return data;
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                return [];
+            }
         }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            products.forEach(product => {
+                console.log('Processing product:', product); // Debug log
+                const energyPercentage = (product.caffeine / 200) * 100; // Normalize to percentage
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.imageUrl}" alt="${product.name}" 
+                             onerror="this.onerror=null; this.src='images/placeholder.png';">
+                        <div class="energy-meter" style="--energy: ${energyPercentage}%"></div>
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="description">${product.description}</p>
+                        <div class="product-stats">
+                            <span>⚡ ${product.caffeine}mg</span>
+                            <span>📊 ${product.servingSize}</span>
+                        </div>
+                        <div class="price-action">
+                            <span class="price">$${product.price.toFixed(2)}</span>
+                            <button class="cyber-button small">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Category button handling
+        document.querySelectorAll('.category-buttons .cyber-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                document.querySelectorAll('.category-buttons .cyber-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+
+                const category = button.dataset.category;
+                const products = await fetchProducts(category);
+                displayProducts(products);
+            });
+        });
+
+        // Initial load
+        window.addEventListener('load', async () => {
+            const products = await fetchProducts();
+            displayProducts(products);
+        });
     </script>
 </body>
 </html> 

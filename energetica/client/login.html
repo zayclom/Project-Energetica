@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Energetica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/forms.css">
+  </head>
+  <body>
+    <div class="splash-container">
+      <div class="lightning">
+        <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
+        <div class="bolt" style="left: 80%; animation-delay: 0.5s;"></div>
+      </div>
+      <div class="form-container">
+        <h2 class="form-title">Login</h2>
+        <div id="message" class="message"></div>
+        <form class="cyber-form" id="loginForm">
+          <div class="form-group">
+            <input type="text" id="username" required placeholder=" ">
+            <label for="username">Username</label>
+            <div class="cyber-line"></div>
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" required placeholder=" ">
+            <label for="password">Password</label>
+            <div class="cyber-line"></div>
+          </div>
+          <button type="submit" class="cyber-button">Access System</button>
+          <button type="button" class="cyber-button secondary" onclick="window.location.href='register.html'">Create Account</button>
+          <button type="button" class="cyber-button secondary" onclick="window.location.href='index.html'">Back to Home</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer">
+      © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
+    </div>
+    <script src="js/effects.js"></script>
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const messageDiv = document.getElementById('message');
+
+        try {
+          const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username,
+              password
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            messageDiv.innerHTML = '<div class="success">Access granted! Initializing system...</div>';
+            // Store the token
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('username', username);
+            
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 2000);
+          } else {
+            messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+          }
+        } catch (error) {
+          messageDiv.innerHTML = '<div class="error">Connection failed. System offline.</div>';
+          console.error('Error:', error);
+        }
+      });
+    </script>
+  </body>
+</html> 

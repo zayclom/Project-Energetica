@@ -13,24 +13,22 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    image: {
-        type: String,
-        required: true
-    },
-    stats: {
-        caffeine: {
-            type: Number,
-            required: true
-        },
-        power: {
-            type: Number,
-            required: true
-        }
-    },
     category: {
         type: String,
         required: true,
         enum: ['drink', 'powder']
+    },
+    imageUrl: {
+        type: String,
+        required: true
+    },
+    caffeine: {
+        type: Number,
+        required: true
+    },
+    servingSize: {
+        type: String,
+        required: true
     },
     inStock: {
         type: Boolean,

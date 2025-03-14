@@ -111,4 +111,24 @@
   100% {
     left: 100%;
   }
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.error {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+.success {
+  background: rgba(0, 255, 128, 0.1);
+  color: #00ff80;
+  border: 1px solid rgba(0, 255, 128, 0.3);
 } 

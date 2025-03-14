@@ -19,24 +19,25 @@
       </div>
       <div class="form-container">
         <h2 class="form-title">Register</h2>
+        <div id="message" class="message"></div>
         <form class="cyber-form" id="registerForm">
           <div class="form-group">
-            <input type="text" id="username" required>
+            <input type="text" id="username" required placeholder=" ">
             <label for="username">Username</label>
             <div class="cyber-line"></div>
           </div>
           <div class="form-group">
-            <input type="email" id="email" required>
+            <input type="email" id="email" required placeholder=" ">
             <label for="email">Email</label>
             <div class="cyber-line"></div>
           </div>
           <div class="form-group">
-            <input type="password" id="password" required>
+            <input type="password" id="password" required placeholder=" ">
             <label for="password">Password</label>
             <div class="cyber-line"></div>
           </div>
           <div class="form-group">
-            <input type="password" id="confirmPassword" required>
+            <input type="password" id="confirmPassword" required placeholder=" ">
             <label for="confirmPassword">Confirm Password</label>
             <div class="cyber-line"></div>
           </div>
@@ -49,5 +50,50 @@
       © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
     </div>
     <script src="js/effects.js"></script>
+    <script>
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const messageDiv = document.getElementById('message');
+
+        // Basic validation
+        if (password !== confirmPassword) {
+          messageDiv.innerHTML = '<div class="error">Passwords do not match</div>';
+          return;
+        }
+
+        try {
+          const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username,
+              email,
+              password
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            messageDiv.innerHTML = '<div class="success">Registration successful! Redirecting...</div>';
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 2000);
+          } else {
+            messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+          }
+        } catch (error) {
+          messageDiv.innerHTML = '<div class="error">Error connecting to server</div>';
+          console.error('Error:', error);
+        }
+      });
+    </script>
   </body>
 </html> 
