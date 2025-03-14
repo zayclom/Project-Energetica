@@ -9,55 +9,54 @@
     <link rel="stylesheet" href="styles/title.css">
     <link rel="stylesheet" href="styles/buttons.css">
     <link rel="stylesheet" href="styles/effects.css">
-    <link rel="stylesheet" href="styles/products.css">
+    <link rel="stylesheet" href="styles/auth.css">
 </head>
 <body>
+    <div class="header">
+        <div class="logo">
+            <a href="index.html"><h1>Energetica</h1></a>
+        </div>
+        <div class="auth-buttons">
+            <!-- Auth buttons will be dynamically inserted here -->
+        </div>
+    </div>
+
     <div class="products-container">
         <div class="lightning">
-            <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
-            <div class="bolt" style="left: 80%; animation-delay: 0.5s;"></div>
+            <div class="bolt"></div>
+            <div class="bolt"></div>
         </div>
         
-        <h1 class="cyber-title">Power Arsenal</h1>
+        <h2 class="cyber-title">Power Arsenal</h2>
         
-        <div class="category-buttons">
-            <button class="cyber-button active" data-category="all">All Products</button>
-            <button class="cyber-button" data-category="drink">Energy Drinks</button>
-            <button class="cyber-button" data-category="powder">Power Powders</button>
-        </div>
-
         <div class="products-grid" id="productsGrid">
             <!-- Products will be loaded here -->
         </div>
 
-        <button class="cyber-button back-button" onclick="window.location.href='index.html'">Return to Base</button>
+        <a href="index.html" class="cyber-button back-button">Back</a>
     </div>
 
-    <div class="footer">
-        © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
-    </div>
+    <footer>
+        <p>&copy; 2024 Energetica. All rights reserved.</p>
+    </footer>
 
-    <script src="js/effects.js"></script>
+    <script src="js/auth.js"></script>
     <script>
-        let currentCategory = 'all';
-        let products = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthStatus();
+            loadProducts();
+        });
 
-        async function fetchProducts(category = 'all') {
+        async function loadProducts() {
             try {
-                const url = category === 'all' 
-                    ? 'http://localhost:5001/api/products'
-                    : `http://localhost:5001/api/products/category/${category}`;
-                
-                const response = await fetch(url);
+                const response = await fetch('http://localhost:5001/api/products');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                console.log('Fetched products:', data); // Debug log
-                return data;
+                const products = await response.json();
+                displayProducts(products);
             } catch (error) {
-                console.error('Error fetching products:', error);
-                return [];
+                console.error('Error loading products:', error);
             }
         }
 
@@ -66,8 +65,7 @@
             grid.innerHTML = '';
 
             products.forEach(product => {
-                console.log('Processing product:', product); // Debug log
-                const energyPercentage = (product.caffeine / 200) * 100; // Normalize to percentage
+                const energyPercentage = (product.caffeine / 200) * 100;
                 
                 const card = document.createElement('div');
                 card.className = 'product-card';
@@ -93,26 +91,6 @@
                 grid.appendChild(card);
             });
         }
-
-        // Category button handling
-        document.querySelectorAll('.category-buttons .cyber-button').forEach(button => {
-            button.addEventListener('click', async () => {
-                document.querySelectorAll('.category-buttons .cyber-button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                button.classList.add('active');
-
-                const category = button.dataset.category;
-                const products = await fetchProducts(category);
-                displayProducts(products);
-            });
-        });
-
-        // Initial load
-        window.addEventListener('load', async () => {
-            const products = await fetchProducts();
-            displayProducts(products);
-        });
     </script>
 </body>
 </html> 
