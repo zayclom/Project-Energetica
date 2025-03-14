@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="styles/effects.css">
   </head>
   <body>
+    <div class="header">
+        <div class="logo">
+            <h1>Energetica</h1>
+        </div>
+        <div class="auth-buttons">
+            <!-- Auth buttons will be dynamically inserted here -->
+        </div>
+    </div>
+
     <div class="splash-container">
       <div class="lightning">
         <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
@@ -26,16 +35,15 @@
         </div>
         <div class="buttons-container">
           <button class="cyber-button" onclick="window.location.href='products.html'">View Products</button>
-          <button class="cyber-button" onclick="window.location.href='login.html'">Login</button>
-          <button class="cyber-button" onclick="window.location.href='register.html'">Register</button>
         </div>
       </div>
     </div>
+
     <div class="footer">
       © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
     </div>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+
     <script src="js/effects.js"></script>
+    <script src="js/auth.js"></script>
   </body>
 </html> 

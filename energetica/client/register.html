@@ -9,91 +9,118 @@
     <link rel="stylesheet" href="styles/title.css">
     <link rel="stylesheet" href="styles/buttons.css">
     <link rel="stylesheet" href="styles/effects.css">
-    <link rel="stylesheet" href="styles/forms.css">
+    <link rel="stylesheet" href="styles/auth.css">
   </head>
   <body>
-    <div class="splash-container">
-      <div class="lightning">
-        <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
-        <div class="bolt" style="left: 80%; animation-delay: 0.5s;"></div>
+    <div class="header">
+      <div class="logo">
+        <h1>Energetica</h1>
       </div>
-      <div class="form-container">
-        <h2 class="form-title">Register</h2>
-        <div id="message" class="message"></div>
-        <form class="cyber-form" id="registerForm">
+      <div class="auth-buttons">
+        <!-- Auth buttons will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-box">
+        <h2 class="cyber-title">Register</h2>
+        <form id="registerForm" onsubmit="handleRegister(event)">
           <div class="form-group">
-            <input type="text" id="username" required placeholder=" ">
             <label for="username">Username</label>
-            <div class="cyber-line"></div>
+            <input type="text" id="username" name="username" required class="cyber-input" minlength="3">
           </div>
           <div class="form-group">
-            <input type="email" id="email" required placeholder=" ">
             <label for="email">Email</label>
-            <div class="cyber-line"></div>
+            <input type="email" id="email" name="email" required class="cyber-input" pattern="[^@\s]+@[^@\s]+\.[^@\s]+">
           </div>
           <div class="form-group">
-            <input type="password" id="password" required placeholder=" ">
             <label for="password">Password</label>
-            <div class="cyber-line"></div>
+            <input type="password" id="password" name="password" required class="cyber-input" minlength="6">
           </div>
-          <div class="form-group">
-            <input type="password" id="confirmPassword" required placeholder=" ">
-            <label for="confirmPassword">Confirm Password</label>
-            <div class="cyber-line"></div>
-          </div>
-          <button type="submit" class="cyber-button">Create Account</button>
-          <button type="button" class="cyber-button secondary" onclick="window.location.href='index.html'">Back to Home</button>
+          <div id="errorMessage" class="error-message"></div>
+          <button type="submit" class="cyber-button" id="submitButton">Register</button>
         </form>
+        <p class="auth-link">Already have an account? <a href="login.html">Login here</a></p>
       </div>
     </div>
-    <div class="footer">
-      © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
-    </div>
-    <script src="js/effects.js"></script>
+
+    <script src="js/auth.js"></script>
     <script>
-      document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+      async function handleRegister(event) {
+        event.preventDefault();
+        const errorMessage = document.getElementById('errorMessage');
+        const submitButton = document.getElementById('submitButton');
         
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const messageDiv = document.getElementById('message');
-
-        // Basic validation
-        if (password !== confirmPassword) {
-          messageDiv.innerHTML = '<div class="error">Passwords do not match</div>';
-          return;
-        }
-
         try {
-          const response = await fetch('http://localhost:5000/api/register', {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Registering...';
+          errorMessage.textContent = '';
+          
+          const username = document.getElementById('username').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+
+          console.log('Preparing registration request for:', { username, email });
+          
+          const API_URL = 'http://localhost:5001';
+          
+          // First, check if the server is available with more detailed error handling
+          try {
+            console.log('Checking server availability...');
+            const healthCheck = await fetch(`${API_URL}/api/auth/check`, {
+              method: 'GET',
+              credentials: 'include',
+              headers: {
+                'Accept': 'application/json',
+                'Origin': window.location.origin
+              }
+            });
+            
+            console.log('Server health check status:', healthCheck.status);
+            const healthData = await healthCheck.json();
+            console.log('Server health check response:', healthData);
+            
+          } catch (error) {
+            console.error('Server health check failed:', error);
+            console.log('Current origin:', window.location.origin);
+            throw new Error(`Server is not available at ${API_URL}. Please ensure both servers are running:\n1. Frontend (npm run dev) - Port 5173\n2. Backend (node app.js) - Port 5001`);
+          }
+
+          // Proceed with registration
+          console.log('Sending registration request...');
+          const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Origin': window.location.origin
             },
-            body: JSON.stringify({
-              username,
-              email,
-              password
-            })
+            body: JSON.stringify({ username, email, password })
           });
 
+          console.log('Registration response status:', response.status);
+          
           const data = await response.json();
+          console.log('Registration response data:', data);
 
           if (response.ok) {
-            messageDiv.innerHTML = '<div class="success">Registration successful! Redirecting...</div>';
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 2000);
+            console.log('Registration successful');
+            currentUser = data.user;
+            updateUIForLoggedInUser();
+            window.location.href = 'index.html';
           } else {
-            messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+            console.error('Registration failed:', data);
+            errorMessage.textContent = data.message || 'Registration failed. Please check your input and try again.';
           }
         } catch (error) {
-          messageDiv.innerHTML = '<div class="error">Error connecting to server</div>';
-          console.error('Error:', error);
+          console.error('Registration error:', error);
+          errorMessage.textContent = error.message || 'Network error or server unavailable. Please try again later.';
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Register';
         }
-      });
+      }
     </script>
   </body>
 </html> 

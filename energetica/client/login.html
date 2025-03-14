@@ -9,77 +9,54 @@
     <link rel="stylesheet" href="styles/title.css">
     <link rel="stylesheet" href="styles/buttons.css">
     <link rel="stylesheet" href="styles/effects.css">
-    <link rel="stylesheet" href="styles/forms.css">
+    <link rel="stylesheet" href="styles/auth.css">
   </head>
   <body>
-    <div class="splash-container">
-      <div class="lightning">
-        <div class="bolt" style="left: 20%; animation-delay: 0.2s;"></div>
-        <div class="bolt" style="left: 80%; animation-delay: 0.5s;"></div>
+    <div class="header">
+      <div class="logo">
+        <h1>Energetica</h1>
       </div>
-      <div class="form-container">
-        <h2 class="form-title">Login</h2>
-        <div id="message" class="message"></div>
-        <form class="cyber-form" id="loginForm">
+      <div class="auth-buttons">
+        <!-- Auth buttons will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-box">
+        <h2 class="cyber-title">Login</h2>
+        <form id="loginForm" onsubmit="handleLogin(event)">
           <div class="form-group">
-            <input type="text" id="username" required placeholder=" ">
-            <label for="username">Username</label>
-            <div class="cyber-line"></div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required class="cyber-input">
           </div>
           <div class="form-group">
-            <input type="password" id="password" required placeholder=" ">
             <label for="password">Password</label>
-            <div class="cyber-line"></div>
+            <input type="password" id="password" name="password" required class="cyber-input">
           </div>
-          <button type="submit" class="cyber-button">Access System</button>
-          <button type="button" class="cyber-button secondary" onclick="window.location.href='register.html'">Create Account</button>
-          <button type="button" class="cyber-button secondary" onclick="window.location.href='index.html'">Back to Home</button>
+          <div id="errorMessage" class="error-message"></div>
+          <button type="submit" class="cyber-button">Login</button>
         </form>
+        <p class="auth-link">Don't have an account? <a href="register.html">Register here</a></p>
       </div>
     </div>
-    <div class="footer">
-      © 2024 Team Energetica™ | All Rights Reserved | Premium Energy Solutions
-    </div>
-    <script src="js/effects.js"></script>
+
+    <script src="js/auth.js"></script>
     <script>
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const username = document.getElementById('username').value;
+      async function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const messageDiv = document.getElementById('message');
-
+        const errorMessage = document.getElementById('errorMessage');
+        
         try {
-          const response = await fetch('http://localhost:5000/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              username,
-              password
-            })
-          });
-
-          const data = await response.json();
-
-          if (response.ok) {
-            messageDiv.innerHTML = '<div class="success">Access granted! Initializing system...</div>';
-            // Store the token
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('username', username);
-            
-            setTimeout(() => {
-              window.location.href = 'dashboard.html';
-            }, 2000);
-          } else {
-            messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+          const result = await login(email, password);
+          if (result && result.error) {
+            errorMessage.textContent = result.error;
           }
         } catch (error) {
-          messageDiv.innerHTML = '<div class="error">Connection failed. System offline.</div>';
-          console.error('Error:', error);
+          errorMessage.textContent = 'Login failed. Please try again.';
         }
-      });
+      }
     </script>
   </body>
 </html> 
