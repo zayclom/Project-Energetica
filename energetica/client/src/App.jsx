@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Products from './pages/Products';
-import Register from './pages/Register';
 import axios from 'axios';
 
 function App() {
-  const [message, setMessage] = useState('Loading...');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,7 +10,6 @@ function App() {
         const response = await axios.get('http://localhost:5000/api/test');
         setMessage(response.data.message);
       } catch (error) {
-        setMessage('Error connecting to server');
         console.error('Error:', error);
       }
     };
@@ -22,12 +18,9 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Products />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
+    <div>
+      {message && <div style={{ display: 'none' }}>{message}</div>}
+    </div>
   );
 }
 
