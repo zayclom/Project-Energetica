@@ -16,8 +16,16 @@
         <div class="logo">
             <a href="index.html"><h1>Energetica</h1></a>
         </div>
-        <div class="auth-buttons">
-            <!-- Auth buttons will be dynamically inserted here -->
+        <div class="header-right">
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <span class="cart-icon-symbol">🛒</span>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+            <div class="auth-buttons">
+                <!-- Auth buttons will be dynamically inserted here -->
+            </div>
         </div>
     </div>
 
@@ -84,13 +92,73 @@
                         </div>
                         <div class="price-action">
                             <span class="price">$${product.price.toFixed(2)}</span>
-                            <button class="cyber-button small">Add to Cart</button>
+                            <button class="cyber-button small add-to-cart" data-product='${JSON.stringify(product)}'>Add to Cart</button>
                         </div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+            
+            // Add event listeners for Add to Cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const product = JSON.parse(e.target.dataset.product);
+                    addToCart(product);
+                });
+            });
         }
+
+        // Add to cart function 
+        function addToCart(product) {
+            // Get existing cart from localStorage
+            let cart = [];
+            const savedCart = localStorage.getItem('energeticaCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+            
+            // Check if product already exists in cart
+            const existingProduct = cart.find(item => item._id === product._id);
+            
+            if (existingProduct) {
+                existingProduct.quantity++;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            // Save updated cart
+            localStorage.setItem('energeticaCart', JSON.stringify(cart));
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'add-cart-success';
+            successMessage.textContent = `${product.name} added to cart!`;
+            document.body.appendChild(successMessage);
+            
+            // Remove message after 2 seconds
+            setTimeout(() => {
+                successMessage.classList.add('fade-out');
+                setTimeout(() => {
+                    document.body.removeChild(successMessage);
+                }, 500);
+            }, 2000);
+        }
+
+        function updateCartCount() {
+            const cartCountElement = document.querySelector('.cart-count');
+            if (!cartCountElement) return;
+            
+            const cart = JSON.parse(localStorage.getItem('energeticaCart') || '[]');
+            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            cartCountElement.textContent = itemCount;
+        }
+
+        // Call this on page load
+        document.addEventListener('DOMContentLoaded', updateCartCount);
     </script>
 </body>
 </html> 

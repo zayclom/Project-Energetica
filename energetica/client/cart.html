@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - Energetica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/cart.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="index.html"><h1>Energetica</h1></a>
+      </div>
+      <div class="auth-buttons">
+        <!-- Auth buttons will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <div class="cart-container">
+      <div class="lightning">
+        <div class="bolt"></div>
+        <div class="bolt"></div>
+      </div>
+      
+      <h2 class="cyber-title">Energy Cache</h2>
+      
+      <div id="cart-items" class="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      
+      <div class="cart-summary">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="cart-total-amount">$0.00</span>
+        </div>
+        <button id="checkout-btn" class="cyber-button">Proceed to Checkout</button>
+        <a href="products.html" class="cyber-button back-button">Continue Shopping</a>
+      </div>
+      
+      <div id="empty-cart-message" class="empty-cart-message">
+        <p>Your energy cache is empty.</p>
+        <p>Power up with our high-performance products!</p>
+        <a href="products.html" class="cyber-button">Browse Products</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Energetica. All rights reserved.</p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+  </body>
+</html> 
