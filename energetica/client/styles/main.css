@@ -384,4 +384,15 @@ footer p {
   width: 100%;
   padding: 0.8rem 1rem;
   margin-bottom: 0.5rem;
+}
+
+.username-link {
+  color: #0ff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.username-link:hover {
+  text-shadow: 0 0 10px #0ff;
+  text-decoration: underline;
 } 

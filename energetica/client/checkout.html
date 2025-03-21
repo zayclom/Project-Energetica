@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Energetica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/cart.css">
+    <link rel="stylesheet" href="styles/checkout.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="index.html"><h1>Energetica</h1></a>
+      </div>
+      <div class="header-right">
+        <div class="cart-icon">
+          <a href="cart.html">
+            <span class="cart-icon-symbol">🛒</span>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+        <div class="auth-buttons">
+          <!-- Auth buttons will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-container">
+      <div class="lightning">
+        <div class="bolt"></div>
+        <div class="bolt"></div>
+      </div>
+      
+      <h2 class="cyber-title">Power Transaction</h2>
+      
+      <div class="checkout-grid">
+        <div class="checkout-summary">
+          <h3 class="section-title">Order Summary</h3>
+          <div id="checkout-items" class="checkout-items">
+            <!-- Items will be loaded here -->
+          </div>
+          <div class="checkout-totals">
+            <div class="subtotal">
+              <span>Subtotal:</span>
+              <span id="subtotal-amount">$0.00</span>
+            </div>
+            <div class="shipping">
+              <span>Shipping:</span>
+              <span id="shipping-amount">$5.99</span>
+            </div>
+            <div class="tax">
+              <span>Tax:</span>
+              <span id="tax-amount">$0.00</span>
+            </div>
+            <div class="total">
+              <span>Total:</span>
+              <span id="total-amount">$0.00</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="checkout-form">
+          <form id="payment-form">
+            <h3 class="section-title">Shipping Details</h3>
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required class="cyber-input">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required class="cyber-input">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" class="cyber-input">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" id="address" name="address" required class="cyber-input">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required class="cyber-input">
+              </div>
+              <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" required class="cyber-input">
+              </div>
+              <div class="form-group">
+                <label for="zip">ZIP Code</label>
+                <input type="text" id="zip" name="zip" required class="cyber-input">
+              </div>
+            </div>
+            
+            <h3 class="section-title">Payment Information</h3>
+            <div class="payment-methods">
+              <div class="payment-method">
+                <input type="radio" id="visa" name="payment-method" value="visa" checked>
+                <label for="visa" class="payment-label">
+                  <span class="payment-icon visa">Visa</span>
+                </label>
+              </div>
+              <div class="payment-method">
+                <input type="radio" id="mastercard" name="payment-method" value="mastercard">
+                <label for="mastercard" class="payment-label">
+                  <span class="payment-icon mastercard">MasterCard</span>
+                </label>
+              </div>
+              <div class="payment-method">
+                <input type="radio" id="paypal" name="payment-method" value="paypal">
+                <label for="paypal" class="payment-label">
+                  <span class="payment-icon paypal">PayPal</span>
+                </label>
+              </div>
+            </div>
+            
+            <div id="card-payment-fields">
+              <div class="form-group">
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="card-number" placeholder="**** **** **** ****" class="cyber-input">
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="expiry">Expiry Date</label>
+                  <input type="text" id="expiry" name="expiry" placeholder="MM/YY" class="cyber-input">
+                </div>
+                <div class="form-group">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" name="cvv" placeholder="***" class="cyber-input">
+                </div>
+              </div>
+            </div>
+            
+            <div id="paypal-fields" style="display: none;">
+              <div class="form-group">
+                <label for="paypal-email">PayPal Email</label>
+                <input type="email" id="paypal-email" name="paypal-email" placeholder="your-email@example.com" class="cyber-input">
+              </div>
+              <p class="payment-note">You will be redirected to PayPal to complete your payment after order confirmation.</p>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" id="place-order-btn" class="cyber-button">Complete Order</button>
+              <a href="cart.html" class="cyber-button secondary">Back to Cart</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Energetica. All rights reserved.</p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        checkAuthStatus();
+        loadCheckoutItems();
+        
+        // Handle form submission
+        document.getElementById('payment-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          processOrder();
+        });
+      });
+      
+      function loadCheckoutItems() {
+        // Get cart from localStorage
+        const cart = JSON.parse(localStorage.getItem('energeticaCart') || '[]');
+        const checkoutItems = document.getElementById('checkout-items');
+        
+        // Update cart count
+        updateCartCount();
+        
+        if (cart.length === 0) {
+          // Redirect to cart if empty
+          window.location.href = 'cart.html';
+          return;
+        }
+        
+        // Clear current items
+        checkoutItems.innerHTML = '';
+        
+        // Calculate totals
+        let subtotal = 0;
+        const shipping = 5.99;
+        
+        // Add each item
+        cart.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+          
+          const itemElement = document.createElement('div');
+          itemElement.className = 'checkout-item';
+          itemElement.innerHTML = `
+            <div class="item-name">${item.name} × ${item.quantity}</div>
+            <div class="item-price">$${itemTotal.toFixed(2)}</div>
+          `;
+          
+          checkoutItems.appendChild(itemElement);
+        });
+        
+        // Calculate tax (8.5%)
+        const tax = subtotal * 0.085;
+        const total = subtotal + shipping + tax;
+        
+        // Update totals
+        document.getElementById('subtotal-amount').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('shipping-amount').textContent = `$${shipping.toFixed(2)}`;
+        document.getElementById('tax-amount').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('total-amount').textContent = `$${total.toFixed(2)}`;
+      }
+      
+      function updateCartCount() {
+        const cartCountElement = document.querySelector('.cart-count');
+        if (!cartCountElement) return;
+        
+        const cart = JSON.parse(localStorage.getItem('energeticaCart') || '[]');
+        const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+        
+        cartCountElement.textContent = itemCount;
+      }
+      
+      function processOrder() {
+        // Show processing message
+        const btn = document.getElementById('place-order-btn');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+        
+        // Simulate processing (in a real app, this would be an API call)
+        setTimeout(() => {
+          // Clear cart
+          localStorage.removeItem('energeticaCart');
+          
+          // Redirect to confirmation page
+          window.location.href = 'order-confirmation.html';
+        }, 2000);
+      }
+
+      // Payment method toggle
+      document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+        const cardFields = document.getElementById('card-payment-fields');
+        const paypalFields = document.getElementById('paypal-fields');
+        
+        // Function to toggle payment fields
+        function togglePaymentFields() {
+          const selectedPayment = document.querySelector('input[name="payment-method"]:checked').value;
+          
+          if (selectedPayment === 'paypal') {
+            cardFields.style.display = 'none';
+            paypalFields.style.display = 'block';
+          } else {
+            cardFields.style.display = 'block';
+            paypalFields.style.display = 'none';
+          }
+        }
+        
+        // Add event listeners
+        paymentMethods.forEach(method => {
+          method.addEventListener('change', togglePaymentFields);
+        });
+        
+        // Initialize display
+        togglePaymentFields();
+      });
+    </script>
+  </body>
+</html>

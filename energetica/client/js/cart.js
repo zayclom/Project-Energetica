@@ -139,8 +139,13 @@ function addCartEventListeners() {
   // Checkout button
   const checkoutBtn = document.getElementById('checkout-btn');
   checkoutBtn.addEventListener('click', () => {
-    alert('Checkout functionality coming soon!');
-    // Here you would normally redirect to a checkout page
+    if (cart.length > 0) {
+      // Save cart before navigating
+      saveCart();
+      window.location.href = 'checkout.html';
+    } else {
+      alert('Your cart is empty!');
+    }
   });
 }
 

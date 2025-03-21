@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation - Energetica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/auth.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="index.html"><h1>Energetica</h1></a>
+      </div>
+      <div class="header-right">
+        <div class="cart-icon">
+          <a href="cart.html">
+            <span class="cart-icon-symbol">🛒</span>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+        <div class="auth-buttons">
+          <!-- Auth buttons will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="confirmation-container">
+      <div class="lightning">
+        <div class="bolt"></div>
+        <div class="bolt"></div>
+      </div>
+      
+      <div class="confirmation-box">
+        <div class="success-icon">✓</div>
+        <h2 class="cyber-title">Order Confirmed</h2>
+        <p class="confirmation-message">Your power enhancement package is on its way!</p>
+        <div class="order-details">
+          <p>Order #: <span id="order-number">ENR-2845782</span></p>
+          <p>A confirmation has been sent to your email.</p>
+          <p>Payment Method: <span id="payment-method">Credit Card</span></p>
+        </div>
+        <div class="confirmation-actions">
+          <a href="products.html" class="cyber-button">Continue Shopping</a>
+          <a href="index.html" class="cyber-button secondary">Return Home</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Energetica. All rights reserved.</p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        checkAuthStatus();
+        
+        // Generate random order number
+        const orderNum = 'ENR-' + Math.floor(1000000 + Math.random() * 9000000);
+        document.getElementById('order-number').textContent = orderNum;
+        
+        // Update cart count (should be 0 now)
+        updateCartCount();
+        
+        // Display payment method
+        const paymentMethod = localStorage.getItem('paymentMethod') || 'visa';
+        const paymentMethodElement = document.getElementById('payment-method');
+        
+        if (paymentMethod === 'paypal') {
+          paymentMethodElement.textContent = 'PayPal';
+        } else if (paymentMethod === 'mastercard') {
+          paymentMethodElement.textContent = 'MasterCard';
+        } else {
+          paymentMethodElement.textContent = 'Visa';
+        }
+        
+        // Clean up localStorage
+        localStorage.removeItem('paymentMethod');
+      });
+      
+      function updateCartCount() {
+        const cartCountElement = document.querySelector('.cart-count');
+        if (!cartCountElement) return;
+        cartCountElement.textContent = '0';
+      }
+    </script>
+    
+    <style>
+      .confirmation-container {
+        padding-top: 100px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding-bottom: 100px;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+      }
+      
+      .confirmation-box {
+        background: rgba(16, 16, 24, 0.8);
+        border: 1px solid #0ff;
+        border-radius: 8px;
+        padding: 2.5rem;
+        text-align: center;
+        width: 100%;
+        animation: glow 2s infinite alternate;
+      }
+      
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        to {
+          box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        }
+      }
+      
+      .success-icon {
+        font-size: 4rem;
+        color: #0ff;
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      
+      .confirmation-message {
+        font-size: 1.5rem;
+        color: #fff;
+        margin-bottom: 2rem;
+      }
+      
+      .order-details {
+        margin: 2rem 0;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+      }
+      
+      .order-details p {
+        margin: 0.5rem 0;
+      }
+      
+      .order-details span {
+        color: #0ff;
+        font-family: 'Orbitron', sans-serif;
+      }
+      
+      .confirmation-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+      
+      .confirmation-actions .cyber-button {
+        min-width: 180px;
+      }
+    </style>
+  </body>
+</html>

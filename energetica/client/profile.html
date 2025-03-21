@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Energetica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/title.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/effects.css">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/profile.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="index.html"><h1>Energetica</h1></a>
+      </div>
+      <div class="header-right">
+        <div class="cart-icon">
+          <a href="cart.html">
+            <span class="cart-icon-symbol">🛒</span>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+        <div class="auth-buttons">
+          <!-- Auth buttons will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-container">
+      <div class="lightning">
+        <div class="bolt"></div>
+        <div class="bolt"></div>
+      </div>
+      
+      <h2 class="cyber-title">User Profile</h2>
+      
+      <div class="profile-grid">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">👤</div>
+            <h3 id="profile-username">Loading...</h3>
+            <p id="profile-email" class="profile-email">Loading...</p>
+          </div>
+          
+          <div class="profile-section">
+            <h4 class="section-title">Account Details</h4>
+            <div class="profile-info">
+              <div class="info-row">
+                <span class="label">Member Since:</span>
+                <span id="join-date">Loading...</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Orders:</span>
+                <span id="order-count">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h4 class="section-title">Recent Orders</h4>
+            <div id="recent-orders" class="recent-orders">
+              <!-- Orders will be loaded here -->
+              <p class="no-orders">No recent orders</p>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button class="cyber-button" onclick="editProfile()">Edit Profile</button>
+            <button class="cyber-button secondary" onclick="logout()">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Energetica. All rights reserved.</p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        checkAuthStatus();
+        loadProfileData();
+        updateCartCount();
+      });
+
+      function loadProfileData() {
+        // Get user data from localStorage
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Update profile information
+        document.getElementById('profile-username').textContent = user.username;
+        document.getElementById('profile-email').textContent = user.email;
+        
+        // Set join date (this would normally come from the server)
+        const joinDate = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('join-date').textContent = joinDate;
+      }
+
+      function editProfile() {
+        // This would normally open a modal or navigate to an edit page
+        alert('Profile editing coming soon!');
+      }
+
+      function logout() {
+        // Clear user data
+        localStorage.removeItem('user');
+        localStorage.removeItem('energeticaCart');
+        
+        // Redirect to home page
+        window.location.href = 'index.html';
+      }
+
+      function updateCartCount() {
+        const cartCountElement = document.querySelector('.cart-count');
+        if (!cartCountElement) return;
+        
+        const cart = JSON.parse(localStorage.getItem('energeticaCart') || '[]');
+        const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+        
+        cartCountElement.textContent = itemCount;
+      }
+    </script>
+  </body>
+</html> 

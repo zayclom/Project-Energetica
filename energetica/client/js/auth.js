@@ -4,6 +4,15 @@ let currentUser = null;
 // Check if user is logged in
 async function checkAuthStatus() {
     try {
+        // First try to get user from localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            currentUser = JSON.parse(storedUser);
+            updateUIForLoggedInUser();
+            updateButtonsVisibility(true);
+        }
+
+        // Then verify with server
         const response = await fetch('http://localhost:5001/api/auth/check', {
             credentials: 'include'
         });
@@ -11,28 +20,39 @@ async function checkAuthStatus() {
         
         if (data.isAuthenticated) {
             currentUser = data.user;
+            localStorage.setItem('user', JSON.stringify(data.user));
             updateUIForLoggedInUser();
             updateButtonsVisibility(true);
         } else {
+            // If server says not authenticated, clear everything
             currentUser = null;
+            localStorage.removeItem('user');
             updateUIForLoggedOutUser();
             updateButtonsVisibility(false);
         }
     } catch (error) {
         console.error('Auth check failed:', error);
-        updateUIForLoggedOutUser();
-        updateButtonsVisibility(false);
+        // On error, keep using localStorage data if available
+        if (!currentUser) {
+            updateUIForLoggedOutUser();
+            updateButtonsVisibility(false);
+        }
     }
 }
 
 // Update UI for logged-in user
 function updateUIForLoggedInUser() {
     const authButtons = document.querySelector('.auth-buttons');
-    if (authButtons) {
+    if (!authButtons) return;
+
+    // Get user from currentUser instead of localStorage
+    if (currentUser) {
         authButtons.innerHTML = `
-            <span class="user-welcome">Welcome, ${currentUser.username}!</span>
-            <button class="cyber-button" onclick="logout()">Logout</button>
+            <span>Welcome, <a href="profile.html" class="username-link">${currentUser.username}</a></span>
+            <button onclick="logout()" class="cyber-button">Logout</button>
         `;
+    } else {
+        updateUIForLoggedOutUser();
     }
 }
 
@@ -75,6 +95,8 @@ async function login(email, password) {
         
         if (response.ok) {
             currentUser = data.user;
+            // Store user data in localStorage
+            localStorage.setItem('user', JSON.stringify(data.user));
             updateUIForLoggedInUser();
             updateButtonsVisibility(true);
             window.location.href = 'index.html';
@@ -98,6 +120,8 @@ async function logout() {
 
         if (response.ok) {
             currentUser = null;
+            // Clear user data from localStorage
+            localStorage.removeItem('user');
             updateUIForLoggedOutUser();
             updateButtonsVisibility(false);
             window.location.href = 'index.html';
