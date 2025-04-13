@@ -2,13 +2,27 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: function(origin, callback) {
+        const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000'];
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('Origin blocked:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['set-cookie']
+}));
+
 app.use(express.json());
 
 // MongoDB Connection
@@ -40,15 +54,11 @@ app.post('/api/register', async (req, res) => {
             });
         }
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user
+        // Create new user with plain text password
         const user = new User({
             username,
             email,
-            password: hashedPassword
+            password
         });
 
         await user.save();
@@ -59,7 +69,6 @@ app.post('/api/register', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Registration error:', error);
         res.status(500).json({ 
             message: 'Error during registration' 
         });
@@ -77,9 +86,8 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ message: 'Access denied. Invalid credentials.' });
         }
 
-        // Verify password
-        const isValidPassword = await bcrypt.compare(password, user.password);
-        if (!isValidPassword) {
+        // Verify password (plain text comparison)
+        if (user.password !== password) {
             return res.status(401).json({ message: 'Access denied. Invalid credentials.' });
         }
 
@@ -95,10 +103,8 @@ app.post('/api/login', async (req, res) => {
             token,
             username: user.username
         });
-
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ message: 'System malfunction. Please try again.' });
+        res.status(500).json({ message: 'Error during login' });
     }
 });
 

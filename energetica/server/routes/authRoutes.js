@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 // Enable CORS preflight for all routes
@@ -59,7 +58,7 @@ router.post('/register', async (req, res) => {
         const user = new User({
             username,
             email,
-            password // Password will be hashed by the User model pre-save middleware
+            password
         });
 
         // Save user
@@ -102,9 +101,8 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        // Check password
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
+        // Check password (plain text comparison)
+        if (user.password !== password) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
