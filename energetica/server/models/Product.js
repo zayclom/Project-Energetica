@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    preDiscountedPrice: {
+        type: Number,
+        required: true
+    },
     category: {
         type: String,
         required: true,

@@ -1,0 +1,12 @@
+{
+  "name": "energetica-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Energetica project",
+  "main": "add_monster_products.js",
+  "scripts": {
+    "add-products": "node add_monster_products.js"
+  },
+  "dependencies": {
+    "mongoose": "^7.0.0"
+  }
+} 

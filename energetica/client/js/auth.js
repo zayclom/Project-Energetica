@@ -1,43 +1,133 @@
 // Auth state management
 let currentUser = null;
+let lastAuthCheck = 0;
+const AUTH_CHECK_INTERVAL = 5000; // 5 seconds minimum between checks
+let isCheckingAuth = false;
+let authCheckInitialized = false;
+let authCheckPromise = null;
+
+// Initialize auth system
+function initializeAuth() {
+    // Only initialize once
+    if (window.authInitialized) {
+        return;
+    }
+    window.authInitialized = true;
+
+    // Check if we have a valid user in localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        try {
+            const user = JSON.parse(storedUser);
+            currentUser = user;
+            updateUIForLoggedInUser();
+            updateButtonsVisibility(true);
+            dispatchAuthStatusChanged();
+        } catch (e) {
+            console.error('Error parsing stored user:', e);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', performInitialAuthCheck);
+    } else {
+        performInitialAuthCheck();
+    }
+}
+
+// Perform the initial auth check
+function performInitialAuthCheck() {
+    if (!authCheckInitialized) {
+        console.log('Performing initial auth check');
+        authCheckInitialized = true;
+        checkAuthStatus();
+    }
+}
 
 // Check if user is logged in
 async function checkAuthStatus() {
-    try {
-        // First try to get user from localStorage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            currentUser = JSON.parse(storedUser);
-            updateUIForLoggedInUser();
-            updateButtonsVisibility(true);
-        }
-
-        // Then verify with server
-        const response = await fetch('http://localhost:5001/api/auth/check', {
-            credentials: 'include'
-        });
-        const data = await response.json();
-        
-        if (data.isAuthenticated) {
-            currentUser = data.user;
-            localStorage.setItem('user', JSON.stringify(data.user));
-            updateUIForLoggedInUser();
-            updateButtonsVisibility(true);
-        } else {
-            // If server says not authenticated, clear everything
-            currentUser = null;
-            localStorage.removeItem('user');
-            updateUIForLoggedOutUser();
-            updateButtonsVisibility(false);
-        }
-    } catch (error) {
-        console.error('Auth check failed:', error);
-        // On error, keep using localStorage data if available
-        if (!currentUser) {
-            updateUIForLoggedOutUser();
-            updateButtonsVisibility(false);
-        }
+    console.log('Auth check requested');
+    
+    // If there's already a check in progress, return its promise
+    if (authCheckPromise) {
+        console.log('Returning existing auth check promise');
+        return authCheckPromise;
     }
+
+    // Prevent multiple simultaneous checks
+    if (isCheckingAuth) {
+        console.log('Auth check already in progress, skipping');
+        return;
+    }
+
+    // Check if we've checked recently
+    const now = Date.now();
+    if (now - lastAuthCheck < AUTH_CHECK_INTERVAL) {
+        console.log('Auth check skipped - too recent');
+        return;
+    }
+
+    isCheckingAuth = true;
+    lastAuthCheck = now;
+
+    // Create a new promise for this auth check
+    authCheckPromise = (async () => {
+        try {
+            console.log('Starting auth check');
+            // First try to get user from localStorage
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                console.log('Found stored user');
+                currentUser = JSON.parse(storedUser);
+                updateUIForLoggedInUser();
+                updateButtonsVisibility(true);
+                dispatchAuthStatusChanged();
+            }
+
+            // Then verify with server
+            console.log('Verifying with server');
+            const response = await fetch('http://localhost:5001/api/auth/check', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            
+            if (data.isAuthenticated) {
+                console.log('Server confirmed authentication');
+                currentUser = data.user;
+                localStorage.setItem('user', JSON.stringify(data.user));
+                updateUIForLoggedInUser();
+                updateButtonsVisibility(true);
+                dispatchAuthStatusChanged();
+            } else {
+                console.log('Server reported not authenticated');
+                currentUser = null;
+                localStorage.removeItem('user');
+                updateUIForLoggedOutUser();
+                updateButtonsVisibility(false);
+                dispatchAuthStatusChanged();
+            }
+        } catch (error) {
+            console.error('Auth check failed:', error);
+            if (!currentUser) {
+                updateUIForLoggedOutUser();
+                updateButtonsVisibility(false);
+                dispatchAuthStatusChanged();
+            }
+        } finally {
+            isCheckingAuth = false;
+            authCheckPromise = null;
+        }
+    })();
+
+    return authCheckPromise;
+}
+
+// Dispatch auth status changed event
+function dispatchAuthStatusChanged() {
+    const event = new CustomEvent('authStatusChanged', {
+        detail: { user: currentUser }
+    });
+    document.dispatchEvent(event);
 }
 
 // Update UI for logged-in user
@@ -131,5 +221,5 @@ async function logout() {
     }
 }
 
-// Check auth status when page loads
-document.addEventListener('DOMContentLoaded', checkAuthStatus); 
+// Initialize auth system
+initializeAuth(); 
