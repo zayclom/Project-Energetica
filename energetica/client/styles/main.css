@@ -433,4 +433,125 @@ footer p {
     color: #0ff;
     font-family: 'Rajdhani', sans-serif;
     font-size: 1.2rem;
+}
+
+.search-filter-container {
+    background: rgba(16, 16, 24, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.search-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #0ff;
+    color: #fff;
+    border-radius: 4px;
+    min-width: 300px;
+}
+
+.search-bar button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    min-width: auto;
+}
+
+.search-bar input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    color: #0ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+}
+
+.cyber-select {
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #0ff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cyber-select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.price-range, .caffeine-range {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price-range input, .caffeine-range input {
+    width: 80px;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #0ff;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.price-range input:focus, .caffeine-range input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.price-range span, .caffeine-range span {
+    color: #0ff;
+}
+
+@media (max-width: 768px) {
+    .search-filter-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .search-bar input {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .search-bar button {
+        width: 100%;
+    }
 } 

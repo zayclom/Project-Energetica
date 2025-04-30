@@ -235,21 +235,97 @@
         cartCountElement.textContent = itemCount;
       }
       
-      function processOrder() {
+      async function processOrder() {
         // Show processing message
         const btn = document.getElementById('place-order-btn');
         const originalText = btn.textContent;
         btn.disabled = true;
         btn.textContent = 'Processing...';
-        
-        // Simulate processing (in a real app, this would be an API call)
-        setTimeout(() => {
+
+        try {
+          // Get cart data
+          const cart = JSON.parse(localStorage.getItem('energeticaCart') || '[]');
+          if (cart.length === 0) {
+            throw new Error('Your cart is empty');
+          }
+
+          const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+          const shipping = 5.99;
+          const tax = subtotal * 0.085;
+          const total = subtotal + shipping + tax;
+
+          // Check if user is logged in
+          const storedUser = localStorage.getItem('user');
+          console.log('Raw stored user data:', storedUser); // Debug log
+
+          if (!storedUser) {
+            alert('Please log in to complete your order');
+            window.location.href = 'login.html?redirect=checkout.html';
+            return;
+          }
+
+          const user = JSON.parse(storedUser);
+          console.log('Parsed user data:', user); // Debug log
+          console.log('User ID:', user._id); // Debug log
+
+          if (!user._id) {
+            console.error('User ID is missing from user data');
+            throw new Error('User authentication error. Please log in again.');
+          }
+
+          // Get form data
+          const formData = {
+            userId: user._id,
+            items: cart,
+            shippingDetails: {
+              name: document.getElementById('name').value,
+              email: document.getElementById('email').value,
+              phone: document.getElementById('phone').value,
+              address: document.getElementById('address').value,
+              city: document.getElementById('city').value,
+              state: document.getElementById('state').value,
+              zip: document.getElementById('zip').value
+            },
+            paymentMethod: document.querySelector('input[name="payment-method"]:checked').value,
+            subtotal,
+            shipping,
+            tax,
+            total
+          };
+
+          console.log('Sending order data:', formData); // Debug log
+
+          // Send order to server
+          const response = await fetch('http://localhost:5001/api/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(formData)
+          });
+
+          const result = await response.json();
+          console.log('Server response:', result); // Debug log
+
+          if (!response.ok) {
+            throw new Error(result.message || 'Failed to create order');
+          }
+
           // Clear cart
           localStorage.removeItem('energeticaCart');
           
-          // Redirect to confirmation page
-          window.location.href = 'confirmation.html';
-        }, 2000);
+          // Redirect to confirmation page with order ID
+          window.location.href = `confirmation.html?orderId=${result.orderId}`;
+        } catch (error) {
+          console.error('Error processing order:', error);
+          alert(error.message || 'There was an error processing your order. Please try again.');
+        } finally {
+          // Reset button text
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
       }
 
       // Payment method toggle

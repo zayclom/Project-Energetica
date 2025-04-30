@@ -95,6 +95,125 @@
   flex: 1;
 }
 
+.order-card {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00ff00;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.order-date {
+  color: #00ff00;
+  font-size: 0.9em;
+}
+
+.order-status {
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  text-transform: capitalize;
+}
+
+.order-status.pending {
+  background: #ffd700;
+  color: #000;
+}
+
+.order-status.confirmed {
+  background: #00ff00;
+  color: #000;
+}
+
+.order-status.shipped {
+  background: #00bfff;
+  color: #000;
+}
+
+.order-status.delivered {
+  background: #32cd32;
+  color: #000;
+}
+
+.order-status.cancelled {
+  background: #ff4444;
+  color: #fff;
+}
+
+.order-items {
+  margin-bottom: 10px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+.item-name {
+  flex: 1;
+  color: #fff;
+}
+
+.item-quantity {
+  color: #00ff00;
+  margin: 0 10px;
+}
+
+.item-price {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 255, 0, 0.3);
+  font-weight: bold;
+  color: #00ff00;
+}
+
+.error-message {
+  text-align: center;
+  color: #ff4444;
+  padding: 20px;
+}
+
+.order-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  text-align: right;
+}
+
+.cyber-button.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid #00ffff;
+  color: #00ffff;
+  transition: all 0.3s ease;
+}
+
+.cyber-button.small:hover {
+  background: rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
 @media (max-width: 768px) {
   .profile-container {
     padding: 80px 1rem 100px;

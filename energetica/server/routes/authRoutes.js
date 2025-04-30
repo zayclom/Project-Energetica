@@ -116,6 +116,7 @@ router.post('/login', async (req, res) => {
         res.json({
             message: 'Login successful',
             user: {
+                _id: user._id,
                 username: user.username,
                 email: user.email
             }
@@ -142,6 +143,7 @@ router.get('/check', (req, res) => {
         res.json({
             isAuthenticated: true,
             user: {
+                _id: req.session.user.id,
                 username: req.session.user.username,
                 email: req.session.user.email
             }

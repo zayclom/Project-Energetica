@@ -37,6 +37,55 @@
         
         <h2 class="cyber-title">Power Arsenal</h2>
         
+        <div class="search-filter-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products..." class="cyber-input">
+                <button class="cyber-button small" onclick="applyFilters()">Search</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Sort By:</label>
+                    <select id="sortBy" class="cyber-select" onchange="applyFilters()">
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                        <option value="price-asc">Price (Low to High)</option>
+                        <option value="price-desc">Price (High to Low)</option>
+                        <option value="caffeine-asc">Caffeine (Low to High)</option>
+                        <option value="caffeine-desc">Caffeine (High to Low)</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Product Type:</label>
+                    <select id="productType" class="cyber-select" onchange="applyFilters()">
+                        <option value="all">All Types</option>
+                        <option value="drink">Drinks</option>
+                        <option value="powder">Powders</option>
+                        <option value="supplement">Supplements</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Price Range:</label>
+                    <div class="price-range">
+                        <input type="number" id="minPrice" placeholder="Min" class="cyber-input" onchange="applyFilters()">
+                        <span>to</span>
+                        <input type="number" id="maxPrice" placeholder="Max" class="cyber-input" onchange="applyFilters()">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Caffeine Range (mg):</label>
+                    <div class="caffeine-range">
+                        <input type="number" id="minCaffeine" placeholder="Min" class="cyber-input" onchange="applyFilters()">
+                        <span>to</span>
+                        <input type="number" id="maxCaffeine" placeholder="Max" class="cyber-input" onchange="applyFilters()">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="products-grid" id="productsGrid">
             <!-- Products will be loaded here -->
         </div>
@@ -83,6 +132,8 @@
             document.addEventListener('DOMContentLoaded', loadProductsOnce);
         }
 
+        let allProducts = []; // Store all products for filtering
+        
         async function loadProducts() {
             try {
                 console.log('Attempting to fetch products from server...');
@@ -101,7 +152,8 @@
                     return;
                 }
                 
-                displayProducts(products);
+                allProducts = products; // Store all products
+                applyFilters(); // Apply initial filters
             } catch (error) {
                 console.error('Error loading products:', error);
                 const grid = document.getElementById('productsGrid');
@@ -112,6 +164,66 @@
                     </div>
                 `;
             }
+        }
+
+        function applyFilters() {
+            let filteredProducts = [...allProducts];
+            
+            // Apply search text filter
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            if (searchText) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchText) ||
+                    product.description.toLowerCase().includes(searchText)
+                );
+            }
+            
+            // Apply product type filter
+            const productType = document.getElementById('productType').value;
+            if (productType !== 'all') {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.type === productType
+                );
+            }
+            
+            // Apply price range filter
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            filteredProducts = filteredProducts.filter(product => 
+                product.price >= minPrice && product.price <= maxPrice
+            );
+            
+            // Apply caffeine range filter
+            const minCaffeine = parseInt(document.getElementById('minCaffeine').value) || 0;
+            const maxCaffeine = parseInt(document.getElementById('maxCaffeine').value) || Infinity;
+            filteredProducts = filteredProducts.filter(product => 
+                product.caffeine >= minCaffeine && product.caffeine <= maxCaffeine
+            );
+            
+            // Apply sorting
+            const sortBy = document.getElementById('sortBy').value;
+            switch (sortBy) {
+                case 'name-asc':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-desc':
+                    filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'caffeine-asc':
+                    filteredProducts.sort((a, b) => a.caffeine - b.caffeine);
+                    break;
+                case 'caffeine-desc':
+                    filteredProducts.sort((a, b) => b.caffeine - a.caffeine);
+                    break;
+            }
+            
+            displayProducts(filteredProducts);
         }
 
         function displayProducts(products) {

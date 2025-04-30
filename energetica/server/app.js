@@ -95,9 +95,11 @@ mongoose.connection.on('disconnected', () => {
 // Routes
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
+const orderRoutes = require('./routes/orders');
 
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Session check endpoint
 app.get('/api/auth/check', (req, res) => {
